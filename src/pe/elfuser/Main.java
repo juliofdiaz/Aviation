@@ -5,6 +5,13 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 
+/**
+ * This main interface.
+ *
+ * @author juliofdiaz
+ * @version 0.1b
+ *
+ */
 public class Main {
 
     public static void main(String[] args) throws FileNotFoundException {
@@ -27,9 +34,14 @@ public class Main {
 
             ZoneId outZone = ZoneId.of(out.getTimeZone());
 
-            Long timeLapsed = ChronoUnit.MINUTES.between(route.getTakeOff(),LocalTime.now(outZone));
+            Long timeLapsed;
+            if(route.getArrivalOffset()==0){
+                timeLapsed = ChronoUnit.MINUTES.between(route.getTakeOff(),LocalTime.now(outZone));
+            }else{
+                timeLapsed = ChronoUnit.MINUTES.between(route.getTakeOff(),LocalTime.now(outZone))+1440;
+            }
             Long duration = ChronoUnit.MINUTES.between(LocalTime.of(0,0),route.getDuration());
-        if(route.isOnAir(out.getTimeZone())){
+            if(route.isOnAir(out.getTimeZone())){
                 System.out.println( airline.getName() );
                 System.out.print( airline.getIata()+" "+route.getNumber() );
                 System.out.print( "\t"+out.getCity()+"("+out.getIata() );
@@ -43,6 +55,15 @@ public class Main {
         }
 
     }
+
+    /**
+     * This method represents the progress of the flight since it took-off
+     * in a simple String.
+     *
+     * @param lapsed The time lapsed since the flight left.
+     * @param duration The duration of the flight.
+     * @return A String representing the progress of the flight.
+     */
     private static String graphProgress(Long lapsed, long duration){
         Double progressDouble = ((lapsed+0.0)/(duration+0.0)*20)+0.5;
         Integer progressInteger = progressDouble.intValue();
@@ -58,6 +79,14 @@ public class Main {
         return result;
     }
 
+    /**
+     * This method retrieves information about an airline based on its iata
+     * code and it returns an Airline object with that information.
+     *
+     * @param carrier The iata code of the airline.
+     * @param airlines The list of all airlines in the database.
+     * @return An Airline object corresponding to the iata code.
+     */
     private static Airline getAirline(String carrier, AirlineList airlines){
         if(airlines.contains(carrier)){
             return airlines.get(carrier);
@@ -67,6 +96,14 @@ public class Main {
         }
     }
 
+    /**
+     * This method retrieves information about an airport based on its iata
+     * code and it returns an Airport object with that information.
+     *
+     * @param location The iata code of the airport.
+     * @param airports The list of all airport in the database.
+     * @return An Aiport object corresponding to the iata code.
+     */
     private static Airport getAirport(String location, AirportList airports){
         if(airports.contains(location)){
             return airports.get(location);

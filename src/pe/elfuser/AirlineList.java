@@ -6,9 +6,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * This class represents a list of airlines.
+ * This class holds the list of all the Airlines in the database.
+ *
  * @author juliofdiaz
- * @version 0.1
+ * @version 0.1b
  *
  */
 public class AirlineList {

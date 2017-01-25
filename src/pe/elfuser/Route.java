@@ -8,9 +8,15 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 /**
- * This class holds information about a commercial route
+ * This class holds information about a commercial route including the
+ * route number, the name of the carrier, the city where the flight
+ * originates, the destination city of the flight, the time of take off,
+ * the time of landing, the duration of the flight, the day offset of
+ * arrival, and the days where the flight operate.
+ *
+ *
  * @author juliofdiaz
- * @version 0.1
+ * @version 0.1b
  *
  */
 public class Route {
@@ -50,17 +56,27 @@ public class Route {
     public Boolean isOnAir( String outTimeZone ){
         ZoneId outZone = ZoneId.of(outTimeZone);
 
-        if( this.days.contains(LocalDate.now(outZone).getDayOfWeek()) ){
+        Long timeLapsed;
+        if(this.arrivalOffset==0){
+            timeLapsed = ChronoUnit.MINUTES.between(this.takeOff,LocalTime.now(outZone));
+        }else{
+            timeLapsed = ChronoUnit.MINUTES.between(this.takeOff,LocalTime.now(outZone))+1440;
+        }
+        Long duration = ChronoUnit.MINUTES.between(LocalTime.of(0,0),this.duration);
+
+        if( this.days.contains(LocalDate.now(outZone).getDayOfWeek()) && this.arrivalOffset==0){
             if( LocalTime.now(outZone).isAfter(this.takeOff) ) {
-                Long timeLapsed = ChronoUnit.MINUTES.between(this.takeOff,LocalTime.now(outZone));
-                Long duration = ChronoUnit.MINUTES.between(LocalTime.of(0,0),this.duration);
                 if(timeLapsed<duration){
                     return true;
                 }
             }
+        }else if( this.days.contains(LocalDate.now(outZone).getDayOfWeek().minus(1)) && this.arrivalOffset==1){
+            Long timeLapsed_2 = ChronoUnit.MINUTES.between(this.takeOff,LocalTime.now(outZone))+1440;
+            if(timeLapsed_2<duration){
+                return true;
+            }
         }
         return false;
-        //if the flight left yesterday has yesterdays landed
     }
 
     /**
@@ -96,74 +112,166 @@ public class Route {
         return LocalTime.of(hour,minute);
     }
 
+    /**
+     * This method retrieves the value of the carrier class variable.
+     *
+     * @return The value of the carrier class variable.
+     */
     public String getCarrier() {
         return carrier;
     }
 
+    /**
+     * This method sets the carrier class variable.
+     *
+     * @param carrier The new value of the carrier class variable.
+     */
     public void setCarrier(String carrier) {
         this.carrier = carrier;
     }
 
+    /**
+     * This method retrieves the value of the origin class variable.
+     *
+     * @return The value of the origin class variable.
+     */
     public String getOrigin() {
         return origin;
     }
 
+    /**
+     * This method sets the origin class variable.
+     *
+     * @param origin The new value of the origin class variable.
+     */
     public void setOrigin(String origin) {
         this.origin = origin;
     }
 
+    /**
+     * This method retrieves the value of the destination class variable.
+     *
+     * @return The value of the destination class variable.
+     */
     public String getDestination() {
         return destination;
     }
 
+    /**
+     * This method sets the destination class variable.
+     *
+     * @param destination The new value of the destination class variable.
+     */
     public void setDestination(String destination) {
         this.destination = destination;
     }
 
+    /**
+     * This method retrieves the value of the takeOff class variable.
+     *
+     * @return The value of the takeOff class variable.
+     */
     public LocalTime getTakeOff() {
         return takeOff;
     }
 
+    /**
+     * This method sets the takeOff class variable.
+     *
+     * @param takeOff The new value of the takeOff class variable.
+     */
     public void setTakeOff(LocalTime takeOff) {
         this.takeOff = takeOff;
     }
 
+    /**
+     * This method retrieves the value of the landing class variable.
+     *
+     * @return The value of the landing class variable.
+     */
     public LocalTime getLanding() {
         return landing;
     }
 
+    /**
+     * This method sets the landing class variable.
+     *
+     * @param landing The new value of the landing class variable.
+     */
     public void setLanding(LocalTime landing) {
         this.landing = landing;
     }
 
+    /**
+     * This method retrieves the value of the days class variable.
+     *
+     * @return The value of the days class variable.
+     */
     public ArrayList<DayOfWeek> getDays() {
         return days;
     }
 
+    /**
+     * This method sets the days class variable.
+     *
+     * @param days The new value of the days class variable.
+     */
     public void setDays(ArrayList<DayOfWeek> days) {
         this.days = days;
     }
 
+    /**
+     * This method retrieves the value of the number class variable.
+     *
+     * @return\ The value of the number class variable.
+     */
     public Integer getNumber() {
         return number;
     }
 
+    /**
+     * This method sets the number class variable.
+     *
+     * @param number The new value of the number class variable.
+     */
     public void setNumber(Integer number) {
         this.number = number;
     }
 
+    /**
+     * This method retrieves the value of the arrivalOffset class
+     * variable.
+     *
+     * @return The value of the arrivalOffset class variable.
+     */
     public Integer getArrivalOffset() {
         return arrivalOffset;
     }
 
+    /**
+     * This method sets the arrivalOffset class variable.
+     *
+     * @param arrivalOffset The new value of the arrivalOffset class
+     *                      variable.
+     */
     public void setArrivalOffset(Integer arrivalOffset) {
         this.arrivalOffset = arrivalOffset;
     }
 
+    /**
+     * This method sets the duration class variable.
+     *
+     * @param duration The new value of the duration class variable.
+     */
     public void setDuration(LocalTime duration) {
         this.duration = duration;
     }
 
+    /**
+     * This method retrieves the value of the duration class variable.
+     *
+     * @return The value of the duration class variable.
+     */
     public LocalTime getDuration() {
         return duration;
     }

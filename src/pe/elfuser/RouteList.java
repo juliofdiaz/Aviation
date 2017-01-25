@@ -6,9 +6,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * This class holds a list of Routes.
+ * This class holds a list of all the Routes in the database.
+ *
  * @author juliofdiaz
- * @version 0.1
+ * @version 0.1b
  *
  */
 public class RouteList {
@@ -29,6 +30,11 @@ public class RouteList {
         this.routes = new ArrayList<>();
     }
 
+    /**
+     * This method retrieves the routes in this instance.
+     *
+     * @return The list of routes.
+     */
     public ArrayList<Route> getRoutes(){
         return this.routes;
     }

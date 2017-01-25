@@ -6,9 +6,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * This class holds a list of airports.
+ * This class holds the list of all the Airports in the database.
+ *
  * @author juliofdiaz
- * @version 0.1
+ * @version 0.1b
  *
  */
 public class AirportList {
